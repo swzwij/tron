@@ -74,6 +74,8 @@ public:
 
 			_moveAccumulator -= 1.0f;
 
+			_speed += _speed < 5.5 ? 0.01f : _speed < 10 ? 0.2f : 0.01f;
+
 			_previousPosition = _position;
 
 			UpdatePosition();
