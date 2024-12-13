@@ -5,7 +5,7 @@
 #include "Player.cpp"
 
 int cells[32][24] = { 0 };
-const int CELL_SIZE = 64;
+const int CELL_SIZE = 32;
 
 const Vector2 GRID_SIZE(sizeof(cells) / sizeof(cells[0]), sizeof(cells[0]) / sizeof(cells[0][0]));
 const Vector2 WINDOW_SIZE(GRID_SIZE.x * CELL_SIZE, GRID_SIZE.y * CELL_SIZE);
@@ -26,7 +26,7 @@ const sf::Font font = []()
 
 int main() 
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x + OFFSET.x * 2, WINDOW_SIZE.y + OFFSET.x * 2 + 150), "TRON");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x + OFFSET.x * 2, WINDOW_SIZE.y + OFFSET.y * 2), "TRON");
     sf::Clock clock;
 
     Player greenPlayer(1, 28, 19, Vector2(0, -1), sf::Color(153, 255, 125), GRID_SIZE, CELL_SIZE, OFFSET);
@@ -145,6 +145,23 @@ int main()
 
         greenPlayer.Draw(window);
 		orangePlayer.Draw(window);
+
+		sf::Text greenScoreText;
+		greenScoreText.setFont(font);
+		greenScoreText.setString(std::to_string(greenScore));
+		greenScoreText.setCharacterSize(24);
+		greenScoreText.setFillColor(sf::Color(153, 255, 125));
+		greenScoreText.setPosition(OFFSET.x, WINDOW_SIZE.y + OFFSET.y + 10);
+		window.draw(greenScoreText);
+
+		sf::Text orangeScoreText;
+		orangeScoreText.setFont(font);
+		orangeScoreText.setString(std::to_string(orangeScore));
+		orangeScoreText.setCharacterSize(24);
+		orangeScoreText.setFillColor(sf::Color(255, 196, 69));
+		orangeScoreText.setPosition(WINDOW_SIZE.x - orangeScoreText.getLocalBounds().width - OFFSET.x, WINDOW_SIZE.y + OFFSET.y + 10);
+		window.draw(orangeScoreText);
+
 
         window.display();
     }
