@@ -18,6 +18,8 @@ private:
 	float _startSpeed;
 
 	Vector2 _gridSize;
+	int _cellSize;
+	Vector2 _offset;
 
 	Vector2 _previousPosition;
 
@@ -31,16 +33,19 @@ private:
 
 	void UpdatePosition()
 	{
+		if (_position.x + _direction.x < 0 || _position.x + _direction.x  > _gridSize.x - 1 || _position.y + _direction.y < 0 || _position.y + _direction.y > _gridSize.y - 1)
+			return;
+
 		_position.x += _direction.x;
 		_position.y += _direction.y;
 
-		_shape.setPosition(_position.x * 32, _position.y * 32);
+		_shape.setPosition(_position.x * _cellSize + _offset.x, _position.y * _cellSize + _offset.y);
 	}
 
 public:
 	bool hasMoved = false;
 
-	Player(int playerNumber, int x, int y, Vector2 startDirection, sf::Color color, Vector2 gridSize)
+	Player(int playerNumber, int x, int y, Vector2 startDirection, sf::Color color, Vector2 gridSize, int cellSize, Vector2 offset)
 	{
 		_playerNumber = playerNumber;
 		_startPosition = Vector2(x, y);
@@ -52,8 +57,10 @@ public:
 		_speed = _startSpeed;
 
 		_gridSize = gridSize;
+		_cellSize = cellSize;
+		_offset = offset;
 
-		_shape.setSize(sf::Vector2f(32, 32));
+		_shape.setSize(sf::Vector2f(_cellSize, _cellSize));
 		_shape.setFillColor(color);
 	}
 
@@ -65,22 +72,18 @@ public:
 	bool Update(float deltaTime)
 	{
 		hasMoved = false;
-
 		_moveAccumulator += _speed * deltaTime;
 
 		if (_moveAccumulator >= 1.0f)
 		{
-			std::cout << "Player " << _speed << std::endl;
-
-			_moveAccumulator -= 1.0f;
-
-			_speed += _speed < 5.5 ? 0.01f : _speed < 10 ? 0.2f : 0.01f;
+			_speed += _speed < 7 ? 0.01f : _speed < 12 ? 0.2f : 0.01f;
 
 			_previousPosition = _position;
 
 			UpdatePosition();
 
 			hasMoved = true;
+			_moveAccumulator -= 1.0f;
 		}
 
 		return hasMoved;

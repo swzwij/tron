@@ -28,7 +28,7 @@ public:
 	Vector2 previousPosition;
     bool hasMoved;
 
-    Player(int playerNumber, int x, int y, Vector2 startDirection, sf::Color color, Vector2 gridSize);
+    Player(int playerNumber, int x, int y, Vector2 startDirection, sf::Color color, Vector2 gridSize, int cellSize, Vector2 offset);
 
     void UpdateInput(Vector2 input);
 
