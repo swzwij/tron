@@ -34,7 +34,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="poxel-font.ttf">
+    <Font Include="Pixeled.ttf">
       <Filter>Source Files</Filter>
     </Font>
   </ItemGroup>

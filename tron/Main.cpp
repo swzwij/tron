@@ -20,17 +20,21 @@ int orangeScore = 0;
 const sf::Font font = []() 
 {
 	sf::Font font;
-	font.loadFromFile("poxel-font.ttf");
+	font.loadFromFile("Pixeled.ttf");
 	return font;
 }();
 
 int main() 
 {
     sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x + OFFSET.x * 2, WINDOW_SIZE.y + OFFSET.y * 2), "TRON");
+
     sf::Clock clock;
+	sf::Clock timer;
 
     Player greenPlayer(1, 28, 19, Vector2(0, -1), sf::Color(153, 255, 125), GRID_SIZE, CELL_SIZE, OFFSET);
 	Player orangePlayer(2, 5, 5, Vector2(0, 1), sf::Color(255, 196, 69), GRID_SIZE, CELL_SIZE, OFFSET);
+
+	int endTime = 0;
 
     while (window.isOpen()) 
     {
@@ -114,6 +118,9 @@ int main()
 			std::string winner = loser == 1 ? "Orange" : "Green";
 			std::cout << winner << " won!" << std::endl;
 
+			if (endTime == 0)
+				endTime = timer.getElapsedTime().asSeconds();
+
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 			{
 				isGameOver = false;
@@ -125,6 +132,9 @@ int main()
 
 				greenPlayer = Player(1, 28, 19, Vector2(0, -1), sf::Color(153, 255, 125), GRID_SIZE, CELL_SIZE, OFFSET);
 				orangePlayer = Player(2, 5, 5, Vector2(0, 1), sf::Color(255, 196, 69), GRID_SIZE, CELL_SIZE, OFFSET);
+
+				timer.restart();
+				endTime = 0;
 			}
         }
 
@@ -146,12 +156,15 @@ int main()
         greenPlayer.Draw(window);
 		orangePlayer.Draw(window);
 
+		//int yTextPositon = WINDOW_SIZE.y + OFFSET.y + 10;
+		int yTextPositon = 10;
+
 		sf::Text greenScoreText;
 		greenScoreText.setFont(font);
 		greenScoreText.setString(std::to_string(greenScore));
 		greenScoreText.setCharacterSize(24);
 		greenScoreText.setFillColor(sf::Color(153, 255, 125));
-		greenScoreText.setPosition(OFFSET.x, WINDOW_SIZE.y + OFFSET.y + 10);
+		greenScoreText.setPosition(WINDOW_SIZE.x + OFFSET.x - greenScoreText.getLocalBounds().width, yTextPositon);
 		window.draw(greenScoreText);
 
 		sf::Text orangeScoreText;
@@ -159,9 +172,18 @@ int main()
 		orangeScoreText.setString(std::to_string(orangeScore));
 		orangeScoreText.setCharacterSize(24);
 		orangeScoreText.setFillColor(sf::Color(255, 196, 69));
-		orangeScoreText.setPosition(WINDOW_SIZE.x - orangeScoreText.getLocalBounds().width - OFFSET.x, WINDOW_SIZE.y + OFFSET.y + 10);
+		orangeScoreText.setPosition(OFFSET.x, yTextPositon);
 		window.draw(orangeScoreText);
 
+		int gameTime = isGameOver ? endTime : (int)timer.getElapsedTime().asSeconds();
+
+		sf::Text timeText;
+		timeText.setFont(font);
+		timeText.setString(std::to_string(gameTime));
+		timeText.setCharacterSize(24);
+		timeText.setFillColor(sf::Color::White);
+		timeText.setPosition(WINDOW_SIZE.x / 2 + OFFSET.x - timeText.getLocalBounds().width / 2, yTextPositon);
+		window.draw(timeText);
 
         window.display();
     }
