@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include "Vector2.h"
-#include "Player.cpp"
+#include "Player.h"
 
 int cells[32][24] = { 0 };
 const int CELL_SIZE = 32;
